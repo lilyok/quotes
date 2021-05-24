@@ -17,6 +17,7 @@
 		26467F8F2656A7D30040A299 /* quotesUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26467F8E2656A7D30040A299 /* quotesUITests.swift */; };
 		26467F9D26581AB90040A299 /* ColorScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26467F9C26581AB90040A299 /* ColorScheme.swift */; };
 		26467F9F26581D550040A299 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26467F9E26581D550040A299 /* SettingsView.swift */; };
+		26467FA1265BE87A0040A299 /* ShareQuote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26467FA0265BE87A0040A299 /* ShareQuote.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +54,7 @@
 		26467F902656A7D30040A299 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		26467F9C26581AB90040A299 /* ColorScheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorScheme.swift; sourceTree = "<group>"; };
 		26467F9E26581D550040A299 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		26467FA0265BE87A0040A299 /* ShareQuote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareQuote.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,6 +108,7 @@
 				26467F6C2656A7D20040A299 /* quotesApp.swift */,
 				26467F6E2656A7D20040A299 /* ContentView.swift */,
 				26467F9C26581AB90040A299 /* ColorScheme.swift */,
+				26467FA0265BE87A0040A299 /* ShareQuote.swift */,
 				26467F702656A7D30040A299 /* Assets.xcassets */,
 				26467F752656A7D30040A299 /* Persistence.swift */,
 				26467F7A2656A7D30040A299 /* Info.plist */,
@@ -277,6 +280,7 @@
 				26467F9F26581D550040A299 /* SettingsView.swift in Sources */,
 				26467F6F2656A7D20040A299 /* ContentView.swift in Sources */,
 				26467F6D2656A7D20040A299 /* quotesApp.swift in Sources */,
+				26467FA1265BE87A0040A299 /* ShareQuote.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

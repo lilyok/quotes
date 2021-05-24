@@ -91,9 +91,10 @@ struct ContentView: View {
                         Label {Text("Settings")} icon: {
                             Button(action: {openSettings.toggle()}) {
                                 Image(systemName: "gearshape").resizable()
-                                    .frame(width: 32.0, height: 32.0).foregroundColor(Color.black)
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(height: 32).foregroundColor(Color.black)
                             }
-                        }
+                        }.padding(10)
                     }
                     ToolbarItem(placement: .navigationBarTrailing) {
                         Label {Text("Change color scheme")} icon: {
@@ -103,9 +104,20 @@ struct ContentView: View {
                                 // TODO save chosen color in user defaults
                             }) {
                                 Image(systemName: "paintpalette").resizable()
-                                    .frame(width: 32.0, height: 32.0).foregroundColor(Color.black)
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(height: 32).foregroundColor(Color.black)
                             }
-                        }
+                        }.padding(10)
+                    }
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Label {Text("Share the quote")} icon: {
+                            Button(action: actionSheet) {
+                                Image(systemName: "square.and.arrow.up")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(height: 32).foregroundColor(Color.black)
+                            }
+                        }.padding(10)
                     }
                 }
             )
@@ -115,6 +127,11 @@ struct ContentView: View {
         .fullScreenCover(isPresented: $openSettings) {
             SettingsView(currentColorScheme: currentColorScheme)
         }
+    }
+    
+    func actionSheet() {
+        let img = takeScreenshot()
+        showShareActivity(msg:nil, image: img, url: nil, sourceRect: nil)
     }
 }
 
