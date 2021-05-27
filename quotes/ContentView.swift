@@ -58,7 +58,7 @@ struct ContentView: View {
                         self.currentCard = newCurrentCard
                     }
                 } else {
-                    withAnimation(.linear(duration: 0.5)) {
+                    withAnimation(.linear(duration: 1.0)) {
                         self.offsets[currentCard] = .zero
                     }
                 }
@@ -101,7 +101,6 @@ struct ContentView: View {
                             Button(action: {
                                 currentColorScheme = (currentColorScheme + 1) % ColorScheme.count
                                 saveColorScheme(colorId: currentColorScheme)
-                                // TODO save chosen color in user defaults
                             }) {
                                 Image(systemName: "paintpalette").resizable()
                                     .aspectRatio(contentMode: .fit)
