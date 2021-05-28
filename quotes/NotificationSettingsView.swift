@@ -8,23 +8,15 @@
 import SwiftUI
 
 struct NotificationSettingsView: View {
-    @State private var isExpanded: Bool = false
-    @State private var currentStartTime: Date = Date()
-    @State private var currentStopTime: Date = Date()
-    @State private var numberOfQuotes: Int = 1
+    @State private var isExpanded: Bool = loadNotificationSettings(propertyName: "AllowNotification") as? Bool ?? false
+    @State private var currentStartTime: Date = loadNotificationSettings(propertyName: "NotificationStartTime") as? Date ?? dateFormatter.date(from: "08:00")!
+    @State private var currentStopTime: Date = loadNotificationSettings(propertyName: "NotificationStopTime") as? Date ?? dateFormatter.date(from: "20:00")!
+    @State private var numberOfQuotes: Int = loadNotificationSettings(propertyName: "NumberOfQuotes") as? Int ?? 1
 
     @State private var showsStartTimePicker = false
     @State private var showsStopTimePicker = false
     
     private let animationTime = 0.3
-
-    let dateFormatter: DateFormatter = {
-        let df = DateFormatter()
-        df.dateStyle = .none
-        df.timeStyle = .short
-        
-        return df
-    }()
     
     private func foldTimePickerSmoothly(isStartToggled: Bool = false, isStopToggled: Bool = false) {
         withAnimation(.linear(duration: animationTime)) {
@@ -50,7 +42,7 @@ struct NotificationSettingsView: View {
                     if value == false {
                         foldTimePickerSmoothly()
                     }
-                }
+                 }
                 .onTapGesture {foldTimePickerSmoothly()}
             if isExpanded {
                 VStack {
@@ -83,7 +75,6 @@ struct NotificationSettingsView: View {
                         
                         if showsStartTimePicker {
                             DatePicker("", selection: $currentStartTime, displayedComponents: .hourAndMinute).datePickerStyle(WheelDatePickerStyle())
-                                .colorScheme(.light)
                                 .onChange(of: currentStartTime) { value in
                                     saveNotificationSettings(propertyName: "NotificationStartTime", propertyValue: value)
                                     if value > currentStopTime {
@@ -102,7 +93,7 @@ struct NotificationSettingsView: View {
                         
                         if showsStopTimePicker {
                             DatePicker("", selection: $currentStopTime, in: currentStartTime..., displayedComponents: .hourAndMinute)
-                                .datePickerStyle(WheelDatePickerStyle()).colorScheme(.light)
+                                .datePickerStyle(WheelDatePickerStyle())
                                 .onChange(of: currentStopTime) { value in
                                     saveNotificationSettings(propertyName: "NotificationStopTime", propertyValue: value)
                                 }
@@ -134,3 +125,11 @@ func saveNotificationSettings(propertyName: String, propertyValue: Any) {
 func loadNotificationSettings(propertyName: String) -> Any? {
     return UserDefaults.standard.object(forKey: propertyName)
 }
+
+private let dateFormatter: DateFormatter = {
+    let df = DateFormatter()
+    df.dateStyle = .none
+    df.timeStyle = .short
+    
+    return df
+}()

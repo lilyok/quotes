@@ -19,15 +19,14 @@ struct SettingsView: View {
             .navigationBarTitleDisplayMode(.inline)
             .overlay(
                 VStack {
+                    NavigationMenuItem(text: "Remove ads", labelName: "pip.remove", destination: AnyView(BuyPremiumView(currentColorScheme: currentColorScheme, text: "Pay to remove ads"))).padding(.vertical, 10)
                     NotificationSettingsView()
                         .overlay(RoundedRectangle(cornerRadius: 20)
                                     .stroke(Color.white, lineWidth: 5))
-                    Spacer()        
-                    Text("quotes categories")
                     Spacer()
-                    Text("payment details")
-                    Spacer()
-                }.foregroundColor(.black).padding(30).font(.custom("San Francisco", size: 20))
+                    NavigationMenuItem(text: "Select quote's categories", labelName: "wand.and.stars", destination: AnyView(QuotesCategoriesView(currentColorScheme: currentColorScheme)))
+                    NavigationMenuItem(text: "Upgrade to Pro", labelName: "lock.open", destination: AnyView(BuyPremiumView(currentColorScheme: currentColorScheme, text: "Pay to upgrade app")))
+                }.foregroundColor(.black).padding(30).font(.custom("San Francisco", size: 20)).id("_upgrade_to_pro")
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
                         Label {Text("Back From Settings")} icon: {
@@ -43,6 +42,28 @@ struct SettingsView: View {
                 }
             )
         }
+    }
+}
+
+struct NavigationMenuItem: View {
+    let text: String
+    let labelName: String
+    let destination: AnyView
+
+    var body: some View {
+        NavigationLink(destination: destination) {
+            Text(text).font(.custom("San Francisco", size: 22))
+            Spacer()
+            Image(systemName: labelName)
+                .resizable().aspectRatio(contentMode: .fit)
+                .frame(height: 22).foregroundColor(Color.black)
+            Image(systemName: "arrow.right.square")
+                .resizable().aspectRatio(contentMode: .fit)
+                .frame(height: 22).foregroundColor(Color.black)
+        }
+        .padding(20)
+        .overlay(RoundedRectangle(cornerRadius: 20)
+        .stroke(Color.white, lineWidth: 5))
     }
 }
 
