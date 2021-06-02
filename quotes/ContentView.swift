@@ -22,12 +22,18 @@ struct QuoteView: View {
 struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
     
+    @State private var alertTitle = ""
+    @State private var alertDescription = ""
+    @State private var showingAlert = false
+    
     @State private var openSettings = false
     @State private var currentColorScheme = 0
     @State private var isLiked = false
     @State private var currentCard = 0
     @State private var didJustSwipe = false
     @State private var offsets: [CGSize] = [.zero, .init(width: 1000, height: 0)]
+    
+    @State private var userID = ""
     
     private var quoteCards: [QuoteView] = []
     
@@ -122,9 +128,38 @@ struct ContentView: View {
             )
         }.onAppear() {
             currentColorScheme = loadColorScheme()
+            getUserRecordID(completionHandler: actWithUserRecordID)
         }
         .fullScreenCover(isPresented: $openSettings) {
             SettingsView(currentColorScheme: currentColorScheme)
+        }
+        .alert(isPresented: $showingAlert) {
+            Alert(title: Text(self.alertTitle),
+                  message: Text(self.alertDescription),
+                  dismissButton: .default(Text("Got it!")) {
+                    
+                    let settingsCloudKitURL = URL(string: "App-prefs:")
+                    if let url = settingsCloudKitURL, UIApplication.shared.canOpenURL(url) {
+                        if #available(iOS 10, *) {
+                            if UIApplication.shared.canOpenURL(url) {
+                                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                            }
+                        } else {
+                            UIApplication.shared.openURL(url)
+                        }
+                    }
+                }
+            )
+        }
+    }
+    
+    func actWithUserRecordID(result: String, isErrorOccurred: Bool) -> () {
+        self.showingAlert = isErrorOccurred
+        if isErrorOccurred {
+            self.alertTitle = "User cannot be identified"
+            self.alertDescription = result
+        } else {
+            userID = result
         }
     }
     

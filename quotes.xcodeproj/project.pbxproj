@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		26240645266412F1005C052C /* UserIdentification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26240644266412F1005C052C /* UserIdentification.swift */; };
+		2624064926641AFE005C052C /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2624064826641AFE005C052C /* CloudKit.framework */; };
 		26467F6D2656A7D20040A299 /* quotesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26467F6C2656A7D20040A299 /* quotesApp.swift */; };
 		26467F6F2656A7D20040A299 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26467F6E2656A7D20040A299 /* ContentView.swift */; };
 		26467F712656A7D30040A299 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 26467F702656A7D30040A299 /* Assets.xcassets */; };
@@ -41,6 +43,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		26240644266412F1005C052C /* UserIdentification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserIdentification.swift; sourceTree = "<group>"; };
+		2624064626641AF9005C052C /* quotes.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = quotes.entitlements; sourceTree = "<group>"; };
+		2624064826641AFE005C052C /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		26467F692656A7D20040A299 /* quotes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = quotes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		26467F6C2656A7D20040A299 /* quotesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = quotesApp.swift; sourceTree = "<group>"; };
 		26467F6E2656A7D20040A299 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -68,6 +73,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2624064926641AFE005C052C /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -88,6 +94,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2624064726641AFE005C052C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				2624064826641AFE005C052C /* CloudKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		26467F602656A7D20040A299 = {
 			isa = PBXGroup;
 			children = (
@@ -95,6 +109,7 @@
 				26467F822656A7D30040A299 /* quotesTests */,
 				26467F8D2656A7D30040A299 /* quotesUITests */,
 				26467F6A2656A7D20040A299 /* Products */,
+				2624064726641AFE005C052C /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -111,6 +126,7 @@
 		26467F6B2656A7D20040A299 /* quotes */ = {
 			isa = PBXGroup;
 			children = (
+				2624064626641AF9005C052C /* quotes.entitlements */,
 				26467F6C2656A7D20040A299 /* quotesApp.swift */,
 				26467F6E2656A7D20040A299 /* ContentView.swift */,
 				26467F9C26581AB90040A299 /* ColorScheme.swift */,
@@ -124,6 +140,7 @@
 				26BC3AC0265FE8C90018CA3C /* NotificationSettingsView.swift */,
 				26BC3AC2266005F10018CA3C /* BuyPremiumView.swift */,
 				26BC3AC4266006AD0018CA3C /* QuotesCategoriesView.swift */,
+				26240644266412F1005C052C /* UserIdentification.swift */,
 			);
 			path = quotes;
 			sourceTree = "<group>";
@@ -287,6 +304,7 @@
 				26BC3AC5266006AD0018CA3C /* QuotesCategoriesView.swift in Sources */,
 				26467F9D26581AB90040A299 /* ColorScheme.swift in Sources */,
 				26BC3AC3266005F10018CA3C /* BuyPremiumView.swift in Sources */,
+				26240645266412F1005C052C /* UserIdentification.swift in Sources */,
 				26467F762656A7D30040A299 /* Persistence.swift in Sources */,
 				26467F9F26581D550040A299 /* SettingsView.swift in Sources */,
 				26BC3AC1265FE8C90018CA3C /* NotificationSettingsView.swift in Sources */,
@@ -449,6 +467,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = quotes/quotes.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"quotes/Preview Content\"";
 				DEVELOPMENT_TEAM = V3XY5R5N6T;
@@ -471,6 +490,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = quotes/quotes.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"quotes/Preview Content\"";
 				DEVELOPMENT_TEAM = V3XY5R5N6T;
