@@ -23,6 +23,8 @@
 		26BC3AC1265FE8C90018CA3C /* NotificationSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26BC3AC0265FE8C90018CA3C /* NotificationSettingsView.swift */; };
 		26BC3AC3266005F10018CA3C /* BuyPremiumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26BC3AC2266005F10018CA3C /* BuyPremiumView.swift */; };
 		26BC3AC5266006AD0018CA3C /* QuotesCategoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26BC3AC4266006AD0018CA3C /* QuotesCategoriesView.swift */; };
+		26FF4668266A38B8005C299C /* QuoteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26FF4667266A38B8005C299C /* QuoteView.swift */; };
+		26FF466A266A3A31005C299C /* ServerClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26FF4669266A3A31005C299C /* ServerClient.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -66,6 +68,8 @@
 		26BC3AC0265FE8C90018CA3C /* NotificationSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSettingsView.swift; sourceTree = "<group>"; };
 		26BC3AC2266005F10018CA3C /* BuyPremiumView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyPremiumView.swift; sourceTree = "<group>"; };
 		26BC3AC4266006AD0018CA3C /* QuotesCategoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuotesCategoriesView.swift; sourceTree = "<group>"; };
+		26FF4667266A38B8005C299C /* QuoteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuoteView.swift; sourceTree = "<group>"; };
+		26FF4669266A3A31005C299C /* ServerClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerClient.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -126,21 +130,17 @@
 		26467F6B2656A7D20040A299 /* quotes */ = {
 			isa = PBXGroup;
 			children = (
+				26FF4666266960EE005C299C /* common */,
+				26FF4665266960A5005C299C /* settings */,
 				2624064626641AF9005C052C /* quotes.entitlements */,
 				26467F6C2656A7D20040A299 /* quotesApp.swift */,
 				26467F6E2656A7D20040A299 /* ContentView.swift */,
-				26467F9C26581AB90040A299 /* ColorScheme.swift */,
-				26467FA0265BE87A0040A299 /* ShareQuote.swift */,
 				26467F702656A7D30040A299 /* Assets.xcassets */,
 				26467F752656A7D30040A299 /* Persistence.swift */,
 				26467F7A2656A7D30040A299 /* Info.plist */,
 				26467F772656A7D30040A299 /* quotes.xcdatamodeld */,
 				26467F722656A7D30040A299 /* Preview Content */,
-				26467F9E26581D550040A299 /* SettingsView.swift */,
-				26BC3AC0265FE8C90018CA3C /* NotificationSettingsView.swift */,
-				26BC3AC2266005F10018CA3C /* BuyPremiumView.swift */,
-				26BC3AC4266006AD0018CA3C /* QuotesCategoriesView.swift */,
-				26240644266412F1005C052C /* UserIdentification.swift */,
+				26FF4667266A38B8005C299C /* QuoteView.swift */,
 			);
 			path = quotes;
 			sourceTree = "<group>";
@@ -169,6 +169,28 @@
 				26467F902656A7D30040A299 /* Info.plist */,
 			);
 			path = quotesUITests;
+			sourceTree = "<group>";
+		};
+		26FF4665266960A5005C299C /* settings */ = {
+			isa = PBXGroup;
+			children = (
+				26467F9E26581D550040A299 /* SettingsView.swift */,
+				26BC3AC2266005F10018CA3C /* BuyPremiumView.swift */,
+				26BC3AC4266006AD0018CA3C /* QuotesCategoriesView.swift */,
+				26BC3AC0265FE8C90018CA3C /* NotificationSettingsView.swift */,
+			);
+			path = settings;
+			sourceTree = "<group>";
+		};
+		26FF4666266960EE005C299C /* common */ = {
+			isa = PBXGroup;
+			children = (
+				26240644266412F1005C052C /* UserIdentification.swift */,
+				26467F9C26581AB90040A299 /* ColorScheme.swift */,
+				26467FA0265BE87A0040A299 /* ShareQuote.swift */,
+				26FF4669266A3A31005C299C /* ServerClient.swift */,
+			);
+			path = common;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -307,9 +329,11 @@
 				26240645266412F1005C052C /* UserIdentification.swift in Sources */,
 				26467F762656A7D30040A299 /* Persistence.swift in Sources */,
 				26467F9F26581D550040A299 /* SettingsView.swift in Sources */,
+				26FF4668266A38B8005C299C /* QuoteView.swift in Sources */,
 				26BC3AC1265FE8C90018CA3C /* NotificationSettingsView.swift in Sources */,
 				26467F6F2656A7D20040A299 /* ContentView.swift in Sources */,
 				26467F6D2656A7D20040A299 /* quotesApp.swift in Sources */,
+				26FF466A266A3A31005C299C /* ServerClient.swift in Sources */,
 				26467FA1265BE87A0040A299 /* ShareQuote.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

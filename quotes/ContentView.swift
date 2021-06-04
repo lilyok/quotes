@@ -8,17 +8,6 @@
 import SwiftUI
 import CoreData
 
-struct QuoteView: View {
-    let tmp: Int
-    var body: some View {
-        Text("Test quote wise motivation it is dummy text to understand how it will be look like \(tmp)")
-            .foregroundColor(Color.black)
-            .padding(40).multilineTextAlignment(.center)
-            .font(.custom("Rockwell", size: 25))
-            .background(Color.white.opacity(0.3)).cornerRadius(40.0).padding(20)//.offset(y: -40)
-    }
-}
-
 struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
     
@@ -28,21 +17,19 @@ struct ContentView: View {
     
     @State private var openSettings = false
     @State private var currentColorScheme = 0
-    @State private var isLiked = false
     @State private var currentCard = 0
     @State private var didJustSwipe = false
     @State private var offsets: [CGSize] = [.zero, .init(width: 1000, height: 0)]
     
     @State private var userID = ""
     
-    private var quoteCards: [QuoteView] = []
+    @State private var quoteCards: QuoteList?
     
     init() {
         UITableView.appearance().backgroundColor = UIColor.clear
         UITableViewCell.appearance().backgroundColor = .clear
         UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
         UINavigationBar.appearance().shadowImage = UIImage()
-        self.quoteCards = [QuoteView(tmp: 0), QuoteView(tmp: 1)]
     }
     
     var gesture: some Gesture {
@@ -57,6 +44,7 @@ struct ContentView: View {
                     let x = w > 50 ? 1000 : w < -50 ? -1000 : 0
                     let y = h > 50 ? 1000 : h < -50 ? -1000 : 0
                     let newCurrentCard = (self.currentCard + 1) % 2
+                    self.quoteCards!.setStates(index: newCurrentCard)
                     self.offsets[newCurrentCard] = .init(width: -x, height: -y)
                     withAnimation(.linear(duration: 1)) {
                         self.offsets[currentCard] = .init(width: x, height: y)
@@ -79,16 +67,11 @@ struct ContentView: View {
             .overlay(
                 VStack {
                     ZStack{
-                        ForEach(0...quoteCards.count - 1, id: \.self) { i in
-                            quoteCards[i].offset(self.offsets[i]).gesture(self.gesture)
+                        if quoteCards != nil {
+                            ForEach(0...quoteCards!.data.count-1, id: \.self) { i in
+                                quoteCards!.data[i].offset(self.offsets[i]).gesture(self.gesture)
+                            }
                         }
-                    }
-                    Button(action: {
-                        isLiked.toggle()
-                        // TODO send to server smth like this (quote.id, isLiked)
-                    }) {
-                        Image(systemName: isLiked ? "heart.fill" : "heart").resizable()
-                            .frame(width: 36.0, height: 36.0).foregroundColor(Color.black)
                     }
                 }
                 .navigationBarTitleDisplayMode(.inline)
@@ -158,8 +141,12 @@ struct ContentView: View {
         if isErrorOccurred {
             self.alertTitle = "User cannot be identified"
             self.alertDescription = result
+            self.quoteCards = QuoteList(userID: "")
         } else {
-            userID = result
+            self.userID = result
+            withAnimation(.linear(duration: 0.2)) {
+                self.quoteCards = QuoteList(userID: self.userID)
+            }
         }
     }
     

@@ -9,15 +9,15 @@ import SwiftUI
 
 struct NotificationSettingsView: View {
     @State private var isExpanded: Bool = loadNotificationSettings(propertyName: "AllowNotification") as? Bool ?? false
-    @State private var currentStartTime: Date = loadNotificationSettings(propertyName: "NotificationStartTime") as? Date ?? dateFormatter.date(from: "08:00")!
-    @State private var currentStopTime: Date = loadNotificationSettings(propertyName: "NotificationStopTime") as? Date ?? dateFormatter.date(from: "20:00")!
+    @State private var currentStartTime: Date = Date()
+    @State private var currentStopTime: Date = Date()
     @State private var numberOfQuotes: Int = loadNotificationSettings(propertyName: "NumberOfQuotes") as? Int ?? 1
 
     @State private var showsStartTimePicker = false
     @State private var showsStopTimePicker = false
     
     private let animationTime = 0.3
-    
+
     private func foldTimePickerSmoothly(isStartToggled: Bool = false, isStopToggled: Bool = false) {
         withAnimation(.linear(duration: animationTime)) {
             if isStartToggled {
