@@ -60,7 +60,7 @@ struct QuoteView: View {
                 .foregroundColor(Color.black)
                 .multilineTextAlignment(.center)
                 .frame(alignment: .center)
-                .font(.custom("Rockwell", size: 25))
+                .font(.custom("American Typewriter", size: 25))
             if currentText.isLikeAvailable() {
                 Button(action: {
                     currentText.data!.like = !currentText.data!.like
