@@ -18,7 +18,6 @@ let ColorScheme = [
 
 func saveColorScheme(colorId: Int) {
     UserDefaults.standard.set(colorId, forKey: "ColorSchemeColorId")
-    // TODO sendColorScheme - save on backend
 }
 
 func loadColorScheme() -> Int {

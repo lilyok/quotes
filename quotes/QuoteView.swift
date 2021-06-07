@@ -10,6 +10,11 @@ import SwiftUI
 class QuoteText: ObservableObject {
     @Published var data: QuoteResponse?
     private var isConnectionError: Bool = false
+    public var likeQuote: (_ index: UUID, _ isLiked: Bool) -> () = {_,_ in }
+
+    public func setLikeQuote() {
+        self.likeQuote(data!.id, data!.like)
+    }
 
     public func setStates(result: QuoteResponse?, isConnectionError: Bool) {
         self.isConnectionError = isConnectionError
@@ -64,7 +69,7 @@ struct QuoteView: View {
             if currentText.isLikeAvailable() {
                 Button(action: {
                     currentText.data!.like = !currentText.data!.like
-                    // TODO send to server smth like this (quote.id, isLiked)
+                    currentText.setLikeQuote()
                 }) {
                     Image(systemName: currentText.data!.like ? "heart.fill" : "heart").resizable()
                         .frame(width: 36.0, height: 36.0).foregroundColor(Color.black)
@@ -87,12 +92,14 @@ class QuoteList {
         self.completionErrorHandler = completionErrorHandler
         self.serverClient = ServerClient(userID: userID, completionHandler: { index, result in
             self.data[index].setStates(result: result, isConnectionError: false)
-        }, completionErrorHandler: { index, description in
+        }, completionErrorHandler: { description in
             self.data[0].setStates(result: nil, isConnectionError: true)
             self.data[1].setStates(result: nil, isConnectionError: true)
             
             self.completionErrorHandler(description)
         })
+        self.data[0].currentText.likeQuote = self.serverClient!.setLike
+        self.data[1].currentText.likeQuote = self.serverClient!.setLike
     }
 
     public func setStates(index: Int) {
