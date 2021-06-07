@@ -11,7 +11,7 @@ import CoreData
 struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
     
-    @State private var alertTitle = ""
+    private let alertTitle = "Something went wrong"
     @State private var alertDescription = ""
     @State private var showingAlert = false
     
@@ -69,7 +69,8 @@ struct ContentView: View {
                     ZStack{
                         if quoteCards != nil {
                             ForEach(0...quoteCards!.data.count-1, id: \.self) { i in
-                                quoteCards!.data[i].offset(self.offsets[i]).gesture(self.gesture)
+                                quoteCards!.data[i]
+                                    .offset(self.offsets[i]).gesture(self.gesture)
                             }
                         }
                     }
@@ -131,21 +132,25 @@ struct ContentView: View {
                             UIApplication.shared.openURL(url)
                         }
                     }
-                }
+                  }
             )
         }
+    }
+    
+    func actWithInternetConnectionError(message: String) -> () {
+        self.showingAlert = true
+        self.alertDescription = message + "\nPlease check your network settings!"
     }
     
     func actWithUserRecordID(result: String, isErrorOccurred: Bool) -> () {
         self.showingAlert = isErrorOccurred
         if isErrorOccurred {
-            self.alertTitle = "User cannot be identified"
             self.alertDescription = result
-            self.quoteCards = QuoteList(userID: "")
+            self.quoteCards = QuoteList(userID: "", completionErrorHandler: actWithInternetConnectionError)
         } else {
             self.userID = result
             withAnimation(.linear(duration: 0.2)) {
-                self.quoteCards = QuoteList(userID: self.userID)
+                self.quoteCards = QuoteList(userID: self.userID, completionErrorHandler: actWithInternetConnectionError)
             }
         }
     }

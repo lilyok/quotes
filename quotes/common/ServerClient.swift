@@ -10,28 +10,29 @@ import SwiftUI
 let ENVNAME: String = "PROD"  // "TEST"  // "PROD"
 let LINK: [String: String] = ["TEST": "http://127.0.0.1:8000/api", "PROD":  "https://quotes-lilyok.vercel.app/api"]
 
-
 struct QuoteResponse: Codable {
     var quote: String
     var like: Bool
     var status: String
 }
 
-
 class ServerClient {
     let userID: String
     let completionHandler: (_ index: Int, _ result: QuoteResponse) -> ()
+    let completionErrorHandler: (_ index: Int, _ description: String) -> ()
     var response: QuoteResponse?
     var isPreloaded: Bool = false
     
-    init(userID: String, completionHandler: @escaping (_ index: Int, _ result: QuoteResponse) -> ()) {
+    init(userID: String, completionHandler: @escaping (_ index: Int, _ result: QuoteResponse) -> (),
+         completionErrorHandler: @escaping (_ index: Int, _ description: String) -> ()) {
         self.userID = userID
         self.completionHandler = completionHandler
+        self.completionErrorHandler = completionErrorHandler
         self.loadQuote()
     }
 
     private func manageResponse(index: Int, resp: QuoteResponse) {
-        self.completionHandler(index, resp)  // resp.quote, false)
+        self.completionHandler(index, resp)
     }
 
     private func makeRequest(isNowPreloaded: Bool, index: Int, request: URLRequest) {
@@ -49,7 +50,8 @@ class ServerClient {
                 }
             }
             print("Fetch failed: \(error?.localizedDescription ?? "Unknown error")")
-            
+            let appName = Bundle.main.infoDictionary?[kCFBundleNameKey as String] as? String ?? "quotes"
+            self.completionErrorHandler(index, error?.localizedDescription ?? "Please restart \(appName)")
         }.resume()
     }
 

@@ -7,26 +7,32 @@
 
 import Foundation
 import CloudKit
+import UIKit
 
+func getIdentifierForVendor(appName: String) -> (String, Bool) {  // if user forbide using iCloud
+    let vendor = UIDevice.current.identifierForVendor
+    if vendor == nil {
+        return ("Please restart \(appName)", true)
+    }
+    return (vendor!.uuidString, false)
+}
 
 func getUserRecordID(completionHandler: @escaping (_ result: String, _ isErrorOccurred: Bool) -> ()) {
     let container = CKContainer(identifier: "iCloud.LilContainer")
-    
     var result: String = ""
     var isErrorOccurred = false
     
     container.requestApplicationPermission(.userDiscoverability) { (status, error) in
+        
         var userName = NSFullUserName()
         if userName == "" {
             userName = "[your name]"
         }
         let appName = Bundle.main.infoDictionary?[kCFBundleNameKey as String] as? String ?? "quotes"
-        let instruction = "Check iCloud Settings:\nSettings > \(userName) > iCloud.\n\nTurn iCloud features on or off for \(appName)."
         
         container.fetchUserRecordID(completionHandler: { (record, error) in
-            if let error = error {
-                result = error.localizedDescription + "\n\n\(instruction)"
-                isErrorOccurred = true
+            if let _ = error {
+                (result, isErrorOccurred) = getIdentifierForVendor(appName: appName)
                 completionHandler(result, isErrorOccurred)
             } else {
                 container.discoverUserIdentity(withUserRecordID: record!, completionHandler: { (userID, error) in
@@ -34,9 +40,8 @@ func getUserRecordID(completionHandler: @escaping (_ result: String, _ isErrorOc
                         result = currentuserID.recordName
                         isErrorOccurred = false
                     }
-                    else if let error = error {
-                        result = error.localizedDescription
-                        isErrorOccurred = true
+                    else if let _ = error {
+                        (result, isErrorOccurred) = getIdentifierForVendor(appName: appName)
                     }
                     completionHandler(result, isErrorOccurred)
                 })
