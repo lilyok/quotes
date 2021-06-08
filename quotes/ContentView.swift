@@ -90,7 +90,7 @@ struct ContentView: View {
                         Label {Text("Change color scheme")} icon: {
                             Button(action: {
                                 currentColorScheme = (currentColorScheme + 1) % ColorScheme.count
-                                saveColorScheme(colorId: currentColorScheme)
+                                saveColorScheme(colorID: currentColorScheme)
                             }) {
                                 Image(systemName: "paintpalette").resizable()
                                     .aspectRatio(contentMode: .fit)
@@ -115,12 +115,12 @@ struct ContentView: View {
             getUserRecordID(completionHandler: actWithUserRecordID)
         }
         .fullScreenCover(isPresented: $openSettings) {
-            SettingsView(currentColorScheme: currentColorScheme)
+            SettingsView(userID: self.userID, currentColorScheme: currentColorScheme)
         }
         .alert(isPresented: $showingAlert) {
             Alert(title: Text(self.alertTitle),
                   message: Text(self.alertDescription),
-                  dismissButton: .default(Text("Got it!")) {
+                  dismissButton: .destructive(Text("Got it!")) {
                     
                     let settingsCloudKitURL = URL(string: "App-prefs:")
                     if let url = settingsCloudKitURL, UIApplication.shared.canOpenURL(url) {

@@ -7,9 +7,37 @@
 
 import SwiftUI
 
+class ErrorMessage: ObservableObject {
+    @Published var data: String?
+
+    public func setError(description: String) {
+        DispatchQueue.main.async {
+            self.data = description
+        }
+    }
+
+    public func getDescription() -> String {
+        let text = self.data == "nil" ? "Unknown error" : self.data!.description
+        return "\(text)\nSettings will not be saved on the server!\nPlease check your network and try again!"
+    }
+}
+
+
 struct SettingsView: View {
     @Environment(\.presentationMode) var presentationMode
+    let userID: String
     let currentColorScheme: Int
+    var serverClient: ServerClient?
+
+    @ObservedObject private var error: ErrorMessage = ErrorMessage()
+    @State private var isError: Bool = false
+
+    init(userID: String, currentColorScheme: Int){
+        self.userID = userID
+        self.currentColorScheme = currentColorScheme
+        
+        self.serverClient = ServerClient(userID: self.userID, completionHandler: { _, _ in }, completionErrorHandler: self.error.setError)
+    }
 
     var body: some View {
         NavigationView {
@@ -19,20 +47,34 @@ struct SettingsView: View {
             .navigationBarTitleDisplayMode(.inline)
             .overlay(
                 VStack {
-                    NavigationMenuItem(text: "Remove ads", labelName: "pip.remove", destination: AnyView(BuyPremiumView(currentColorScheme: currentColorScheme, text: "Pay to remove ads"))).padding(.vertical, 10)
+                    NavigationMenuItem(text: "Remove ads", labelName: "pip.remove",
+                                       destination: AnyView(BuyPremiumView(currentColorScheme: currentColorScheme, text: "Pay to remove ads")))
+                        .padding(.vertical, 10)
                     NotificationSettingsView()
-                        .overlay(RoundedRectangle(cornerRadius: 20)
-                                    .stroke(Color.white, lineWidth: 5))
+                        .overlay(RoundedRectangle(cornerRadius: 20).stroke(Color.white, lineWidth: 5))
                     Spacer()
-                    NavigationMenuItem(text: "Select quote's categories", labelName: "wand.and.stars", destination: AnyView(QuotesCategoriesView(currentColorScheme: currentColorScheme)))
-                    NavigationMenuItem(text: "Upgrade to Pro", labelName: "lock.open", destination: AnyView(BuyPremiumView(currentColorScheme: currentColorScheme, text: "Pay to upgrade app")))
+                    NavigationMenuItem(text: "Select quote's categories", labelName: "wand.and.stars",
+                                       destination: AnyView(QuotesCategoriesView(currentColorScheme: currentColorScheme)))
+                    NavigationMenuItem(text: "Upgrade to Pro", labelName: "lock.open",
+                                       destination: AnyView(BuyPremiumView(currentColorScheme: currentColorScheme, text: "Pay to upgrade app")))
                 }.foregroundColor(.black).padding(30).font(.custom("San Francisco", size: 20)).id("_upgrade_to_pro")
+                .alert(isPresented: $isError) {
+                    Alert(title: Text("Something went wrong"),
+                          message: Text(self.error.getDescription()),
+                          dismissButton: .destructive(Text("Got it!")) {presentationMode.wrappedValue.dismiss()}
+                    )
+                }
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
                         Label {Text("Back From Settings")} icon: {
                             Button(action: {
-                                presentationMode.wrappedValue.dismiss()
-                                // TODO sendAllSettings - save on backend
+                                self.serverClient?.saveSettings()
+                                if error.data != nil {
+                                    isError = true
+                                }
+                                else {
+                                    presentationMode.wrappedValue.dismiss()
+                                }
                             }) {
                                 Image(systemName: "arrowshape.turn.up.left").resizable()
                                     .frame(width: 32.0, height: 32.0).foregroundColor(Color.black).font(.title)
@@ -62,13 +104,12 @@ struct NavigationMenuItem: View {
                 .frame(height: 22).foregroundColor(Color.black)
         }
         .padding(20)
-        .overlay(RoundedRectangle(cornerRadius: 20)
-        .stroke(Color.white, lineWidth: 5))
+        .overlay(RoundedRectangle(cornerRadius: 20).stroke(Color.white, lineWidth: 5))
     }
 }
 
 struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
-        SettingsView(currentColorScheme: 0)
+        SettingsView(userID: "", currentColorScheme: 0)
     }
 }

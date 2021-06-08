@@ -12,14 +12,9 @@ let DefaultChoice = "Common Sense"
 
 struct QuotesCategoriesView: View {
     @Environment(\.presentationMode) var mode: Binding<PresentationMode>
-
     let currentColorScheme: Int
-    
-    // TODO think about it
     let categories = [[DefaultChoice, "quote.bubble"], ["Favourite", "heart"], ["Popular", "star"]]
-    
     @State var selectedCategories: [String:Bool] = [DefaultChoice: true]
-
     
     var body: some View {
         RadialGradient(
@@ -56,7 +51,7 @@ struct CheckboxFieldView : View {
 
     var body: some View {
 
-         Button(action: {
+        Button(action: {
             self.checkState = !self.checkState
             saveSelectedCategory(text: text, status: self.checkState)
         }) {
@@ -73,7 +68,6 @@ struct CheckboxFieldView : View {
         .foregroundColor(Color.black)
         .font(.custom("San Francisco", size: 20))
         .padding(2)
-
     }
 }
 
@@ -84,7 +78,7 @@ private func saveSelectedCategory(text: String, status: Bool) {
     userDefaults.set(categories, forKey: "SelectedCategories")
 }
 
-private func loadSelectedCategories() -> [String: Bool] {
+public func loadSelectedCategories() -> [String: Bool] {
     let categories = UserDefaults.standard.object(forKey: "SelectedCategories") as? [String:Bool] ?? [DefaultChoice: true]
     return categories
 }

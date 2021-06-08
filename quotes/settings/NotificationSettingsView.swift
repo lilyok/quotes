@@ -11,7 +11,7 @@ struct NotificationSettingsView: View {
     @State private var isExpanded: Bool = loadNotificationSettings(propertyName: "AllowNotification") as? Bool ?? false
     @State private var currentStartTime: Date = Date()
     @State private var currentStopTime: Date = Date()
-    @State private var numberOfQuotes: Int = loadNotificationSettings(propertyName: "NumberOfQuotes") as? Int ?? 1
+    @State private var numberOfQuotes: Int = loadNotificationSettings(propertyName: "NumberOfQuotes") as? Int ?? 5
 
     @State private var showsStartTimePicker = false
     @State private var showsStopTimePicker = false
@@ -42,7 +42,7 @@ struct NotificationSettingsView: View {
                     if value == false {
                         foldTimePickerSmoothly()
                     }
-                 }
+                }
                 .onTapGesture {foldTimePickerSmoothly()}
             if isExpanded {
                 VStack {
@@ -76,10 +76,10 @@ struct NotificationSettingsView: View {
                         if showsStartTimePicker {
                             DatePicker("", selection: $currentStartTime, displayedComponents: .hourAndMinute).datePickerStyle(WheelDatePickerStyle())
                                 .onChange(of: currentStartTime) { value in
-                                    saveNotificationSettings(propertyName: "NotificationStartTime", propertyValue: value)
+                                    saveNotificationSettings(propertyName: "NotificationStartTime", propertyValue: dateFormatter.string(from: value))
                                     if value > currentStopTime {
                                         currentStopTime = value
-                                        saveNotificationSettings(propertyName: "NotificationStopTime", propertyValue: value)
+                                        saveNotificationSettings(propertyName: "NotificationStopTime", propertyValue: dateFormatter.string(from: value))
                                     }
                                 }
                         }
@@ -95,7 +95,7 @@ struct NotificationSettingsView: View {
                             DatePicker("", selection: $currentStopTime, in: currentStartTime..., displayedComponents: .hourAndMinute)
                                 .datePickerStyle(WheelDatePickerStyle())
                                 .onChange(of: currentStopTime) { value in
-                                    saveNotificationSettings(propertyName: "NotificationStopTime", propertyValue: value)
+                                    saveNotificationSettings(propertyName: "NotificationStopTime", propertyValue: dateFormatter.string(from: value))
                                 }
                         }
                     }
@@ -109,12 +109,10 @@ struct NotificationSettingsView: View {
 }
 
 func loadAllNotificationSettings() -> (Bool, Date, Date, Int) {
-    let dateFormatter = DateFormatter()
-    dateFormatter.dateFormat =  "HH:mm"
     let isExpanded = loadNotificationSettings(propertyName: "AllowNotification") as? Bool ?? false
-    let currentStartTime = loadNotificationSettings(propertyName: "NotificationStartTime") as? Date ?? dateFormatter.date(from: "08:00")!
-    let currentStopTime = loadNotificationSettings(propertyName: "NotificationStopTime") as? Date ?? dateFormatter.date(from: "20:00")!
-    let numberOfQuotes = loadNotificationSettings(propertyName: "NumberOfQuotes") as? Int ?? 1
+    let currentStartTime = dateFormatter.date(from: loadNotificationSettings(propertyName: "NotificationStartTime") as? String ?? "08:00")!
+    let currentStopTime = dateFormatter.date(from: loadNotificationSettings(propertyName: "NotificationStopTime") as? String ?? "20:00")!
+    let numberOfQuotes = loadNotificationSettings(propertyName: "NumberOfQuotes") as? Int ?? 5
     return (isExpanded, currentStartTime, currentStopTime, numberOfQuotes)
 }
 
@@ -130,6 +128,7 @@ private let dateFormatter: DateFormatter = {
     let df = DateFormatter()
     df.dateStyle = .none
     df.timeStyle = .short
+    df.dateFormat =  "HH:mm"
     
     return df
 }()

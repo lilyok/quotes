@@ -18,9 +18,18 @@ struct QuoteResponse: Codable {
 }
 
 struct Like: Codable {
-    var userId: String
-    var quoteId: UUID
+    var userID: String
+    var quoteID: UUID
     var isLike: Bool
+}
+
+struct Settings: Codable {
+    var userID: String
+    var categories: [String]
+    var isExpanded: Bool
+    var currentStartTime: Date
+    var currentStopTime: Date
+    var numberOfQuotes: Int
 }
 
 struct CommonResponse: Codable {
@@ -82,20 +91,15 @@ class ServerClient {
         }
     }
     
-    func setLike(quoteId: UUID, isLike: Bool) {
-        let likeObj = Like(userId: self.userID, quoteId: quoteId, isLike: isLike)
-        guard let encoded = try? JSONEncoder().encode(likeObj) else {
-            print("Failed to encode likeObj")
-            return
-        }
-        guard let url = URL(string: "\(LINK[ENVNAME]!)/like") else {
+    func setPostRequest(fullLink: String, encodedObj: Data) {
+        guard let url = URL(string: fullLink) else {
             print("Invalid URL")
             return
         }
         var request = URLRequest(url: url)
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpMethod = "POST"
-        request.httpBody = encoded
+        request.httpBody = encodedObj
 
         URLSession.shared.dataTask(with: request) { data, response, error in
             if let data = data {
@@ -114,5 +118,34 @@ class ServerClient {
             let appName = Bundle.main.infoDictionary?[kCFBundleNameKey as String] as? String ?? "quotes"
             self.completionErrorHandler(error?.localizedDescription ?? "Please restart \(appName)")
         }.resume()
+    }
+
+    func setLike(quoteID: UUID, isLike: Bool) {
+        let likeObj = Like(userID: self.userID, quoteID: quoteID, isLike: isLike)
+        guard let encoded = try? JSONEncoder().encode(likeObj) else {
+            print("Failed to encode likeObj")
+            return
+        }
+        self.setPostRequest(fullLink: "\(LINK[ENVNAME]!)/like", encodedObj: encoded)
+    }
+    
+    
+    func saveSettings() {        
+        let categories = Array(loadSelectedCategories().filter { $0.value == true }.keys)
+        let (isExpanded, currentStartTime, currentStopTime, numberOfQuotes) = loadAllNotificationSettings()
+        
+        let settingsObj = Settings(userID: self.userID, categories: categories, isExpanded: isExpanded,
+                                   currentStartTime: currentStartTime, currentStopTime: currentStopTime, numberOfQuotes: numberOfQuotes)
+        
+        let encoder = JSONEncoder()
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat =  "HH:mm"  // "HH:mm Zzzz"
+        encoder.dateEncodingStrategy = .formatted(dateFormatter)
+        
+        guard let encoded = try? encoder.encode(settingsObj) else {
+            print("Failed to encode settingsObj")
+            return
+        }
+        self.setPostRequest(fullLink: "\(LINK[ENVNAME]!)/settings", encodedObj: encoded)    
     }
 }

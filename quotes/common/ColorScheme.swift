@@ -16,10 +16,10 @@ let ColorScheme = [
     [Color(red: 0.71, green: 1.00, blue: 0.92), Color(red: 0.51, green: 0.75, blue: 0.99)]
 ]
 
-func saveColorScheme(colorId: Int) {
-    UserDefaults.standard.set(colorId, forKey: "ColorSchemeColorId")
+func saveColorScheme(colorID: Int) {
+    UserDefaults.standard.set(colorID, forKey: "ColorSchemeColorID")
 }
 
 func loadColorScheme() -> Int {
-    return UserDefaults.standard.object(forKey: "ColorSchemeColorId") as? Int ?? 0
+    return UserDefaults.standard.object(forKey: "ColorSchemeColorID") as? Int ?? 0
 }
