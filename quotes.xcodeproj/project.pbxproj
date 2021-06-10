@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		260E097D2671355500858BFE /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 260E097C2671355500858BFE /* Notifications.swift */; };
 		26240645266412F1005C052C /* UserIdentification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26240644266412F1005C052C /* UserIdentification.swift */; };
 		2624064926641AFE005C052C /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2624064826641AFE005C052C /* CloudKit.framework */; };
 		26467F6D2656A7D20040A299 /* quotesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26467F6C2656A7D20040A299 /* quotesApp.swift */; };
@@ -45,6 +46,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		260E097C2671355500858BFE /* Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
 		26240644266412F1005C052C /* UserIdentification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserIdentification.swift; sourceTree = "<group>"; };
 		2624064626641AF9005C052C /* quotes.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = quotes.entitlements; sourceTree = "<group>"; };
 		2624064826641AFE005C052C /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
@@ -189,6 +191,7 @@
 				26467F9C26581AB90040A299 /* ColorScheme.swift */,
 				26467FA0265BE87A0040A299 /* ShareQuote.swift */,
 				26FF4669266A3A31005C299C /* ServerClient.swift */,
+				260E097C2671355500858BFE /* Notifications.swift */,
 			);
 			path = common;
 			sourceTree = "<group>";
@@ -330,6 +333,7 @@
 				26467F762656A7D30040A299 /* Persistence.swift in Sources */,
 				26467F9F26581D550040A299 /* SettingsView.swift in Sources */,
 				26FF4668266A38B8005C299C /* QuoteView.swift in Sources */,
+				260E097D2671355500858BFE /* Notifications.swift in Sources */,
 				26BC3AC1265FE8C90018CA3C /* NotificationSettingsView.swift in Sources */,
 				26467F6F2656A7D20040A299 /* ContentView.swift in Sources */,
 				26467F6D2656A7D20040A299 /* quotesApp.swift in Sources */,

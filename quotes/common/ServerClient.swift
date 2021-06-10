@@ -25,6 +25,8 @@ struct Like: Codable {
 
 struct Settings: Codable {
     var userID: String
+    var deviceToken: String
+    var secondsOffset: Int
     var categories: [String]
     var isExpanded: Bool
     var currentStartTime: Date
@@ -32,22 +34,49 @@ struct Settings: Codable {
     var numberOfQuotes: Int
 }
 
+struct TimeZoneOffset: Codable {
+    var userID: String
+    var deviceToken: String
+    var secondsOffset: Int
+}
+
 struct CommonResponse: Codable {
     var status: String
 }
 
 class ServerClient {
-    let userID: String
-    let completionHandler: (_ index: Int, _ result: QuoteResponse) -> ()
-    let completionErrorHandler: (_ description: String) -> ()
+    var userID: String
+    var deviceToken: String
+    var completionHandler: (_ index: Int, _ result: QuoteResponse) -> ()
+    var completionErrorHandler: (_ description: String) -> ()
+    var completionInitHandler: () ->()
     var quoteResponse: QuoteResponse?
     var isPreloaded: Bool = false
     
-    init(userID: String, completionHandler: @escaping (_ index: Int, _ result: QuoteResponse) -> (),
-         completionErrorHandler: @escaping (_ description: String) -> ()) {
+    init(userID: String, deviceToken: String, completionHandler: @escaping (_ index: Int, _ result: QuoteResponse) -> (),
+         completionErrorHandler: @escaping (_ description: String) -> (), completionInitHandler: @escaping ()-> ()) {
         self.userID = userID
+        self.deviceToken = deviceToken
         self.completionHandler = completionHandler
         self.completionErrorHandler = completionErrorHandler
+        self.completionInitHandler = completionInitHandler
+        if self.userID == "" {
+            getUserRecordID(completionHandler: { result, isErrorOccurred in
+                if !isErrorOccurred {
+                    self.userID = result
+                }
+                self.completionInit()
+            })
+        } else {
+            self.completionInit()
+
+        }
+        
+    }
+    
+    private func completionInit() {
+        self.completionInitHandler()
+        self.setNotificationTimezone(deviceToken: self.deviceToken)
         self.loadQuote()
     }
 
@@ -131,10 +160,10 @@ class ServerClient {
     
     
     func saveSettings() {        
-        let categories = Array(loadSelectedCategories().filter { $0.value == true }.keys)
+        let categories = Array(loadSelectedCategories().filter{ $0.value == true }.keys)
         let (isExpanded, currentStartTime, currentStopTime, numberOfQuotes) = loadAllNotificationSettings()
-        
-        let settingsObj = Settings(userID: self.userID, categories: categories, isExpanded: isExpanded,
+        let secondsOffset = TimeZone.current.secondsFromGMT()
+        let settingsObj = Settings(userID: self.userID, deviceToken: self.deviceToken, secondsOffset: secondsOffset, categories: categories, isExpanded: isExpanded,
                                    currentStartTime: currentStartTime, currentStopTime: currentStopTime, numberOfQuotes: numberOfQuotes)
         
         let encoder = JSONEncoder()
@@ -147,5 +176,17 @@ class ServerClient {
             return
         }
         self.setPostRequest(fullLink: "\(LINK[ENVNAME]!)/settings", encodedObj: encoded)    
+    }
+    
+    func setNotificationTimezone(deviceToken: String) {
+        let secondsOffset = TimeZone.current.secondsFromGMT()
+        print("User ID: \(self.userID), device token: \(deviceToken), seconds offset: \(secondsOffset)")
+        let timeZoneOffsetObj = TimeZoneOffset(userID: self.userID, deviceToken: self.deviceToken, secondsOffset: secondsOffset)
+        let encoder = JSONEncoder()
+        guard let encoded = try? encoder.encode(timeZoneOffsetObj) else {
+            print("Failed to encode timeZoneOffsetObj")
+            return
+        }
+        self.setPostRequest(fullLink: "\(LINK[ENVNAME]!)/timezone", encodedObj: encoded)
     }
 }

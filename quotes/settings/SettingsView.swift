@@ -35,8 +35,8 @@ struct SettingsView: View {
     init(userID: String, currentColorScheme: Int){
         self.userID = userID
         self.currentColorScheme = currentColorScheme
-        
-        self.serverClient = ServerClient(userID: self.userID, completionHandler: { _, _ in }, completionErrorHandler: self.error.setError)
+        self.serverClient = AppDelegate.originalAppDelegate!.serverClient
+        self.serverClient?.completionErrorHandler = self.error.setError
     }
 
     var body: some View {

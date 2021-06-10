@@ -90,16 +90,20 @@ class QuoteList {
     init(userID: String, completionErrorHandler: @escaping (_ result: String) -> ()) {
         self.userID = userID
         self.completionErrorHandler = completionErrorHandler
-        self.serverClient = ServerClient(userID: userID, completionHandler: { index, result in
+        self.serverClient = AppDelegate.originalAppDelegate!.serverClient
+        self.serverClient?.completionHandler = { index, result in
             self.data[index].setStates(result: result, isConnectionError: false)
-        }, completionErrorHandler: { description in
+        }
+        self.serverClient?.completionErrorHandler = { description in
             self.data[0].setStates(result: nil, isConnectionError: true)
             self.data[1].setStates(result: nil, isConnectionError: true)
-            
+
             self.completionErrorHandler(description)
-        })
-        self.data[0].currentText.likeQuote = self.serverClient!.setLike
-        self.data[1].currentText.likeQuote = self.serverClient!.setLike
+        }
+        self.serverClient?.completionInitHandler = {
+            self.data[0].currentText.likeQuote = self.serverClient!.setLike
+            self.data[1].currentText.likeQuote = self.serverClient!.setLike
+        }
     }
 
     public func setStates(index: Int) {
